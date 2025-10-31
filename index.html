@@ -1,11 +1,68 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Ajmal's Site</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Welcome to My Site</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: white;
+    }
+    .container {
+      text-align: center;
+      padding: 40px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 20px;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    }
+    h1 {
+      font-size: 3em;
+      margin-bottom: 20px;
+      animation: fadeIn 1s ease-in;
+    }
+    p {
+      font-size: 1.2em;
+      margin: 15px 0;
+    }
+    a {
+      display: inline-block;
+      margin-top: 20px;
+      padding: 12px 30px;
+      background: white;
+      color: #667eea;
+      text-decoration: none;
+      border-radius: 25px;
+      font-weight: bold;
+      transition: transform 0.3s ease;
+    }
+    a:hover {
+      transform: scale(1.05);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
 </head>
 <body>
-  <h1>Welcome to My Site</h1>
-  <p>Contact: 24f2004489@ds.study.iitm.ac.in</p>
-  <a href="/nonexistent-page">Test 404 Page</a>
+  <div class="container">
+    <h1>🌟 Welcome to My Site</h1>
+    <p>This is a demonstration of GitHub Pages with custom 404 error handling.</p>
+    <p>📧 Contact: <strong>24f2004489@ds.study.iitm.ac.in</strong></p>
+    <a href="/nonexistent-page">🔍 Test 404 Page</a>
+  </div>
 </body>
 </html>
