@@ -1,68 +1,532 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Welcome to My Site</title>
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      min-height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      color: white;
-    }
-    .container {
-      text-align: center;
-      padding: 40px;
-      background: rgba(255, 255, 255, 0.1);
-      border-radius: 20px;
-      backdrop-filter: blur(10px);
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-    }
-    h1 {
-      font-size: 3em;
-      margin-bottom: 20px;
-      animation: fadeIn 1s ease-in;
-    }
-    p {
-      font-size: 1.2em;
-      margin: 15px 0;
-    }
-    a {
-      display: inline-block;
-      margin-top: 20px;
-      padding: 12px 30px;
-      background: white;
-      color: #667eea;
-      text-decoration: none;
-      border-radius: 25px;
-      font-weight: bold;
-      transition: transform 0.3s ease;
-    }
-    a:hover {
-      transform: scale(1.05);
-      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-    }
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(-20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ajmal M | AI Researcher</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    
+    <!-- Icons -->
+    <script src="https://unpkg.com/feather-icons"></script>
+
+    <style>
+        :root {
+            --bg: #030304;
+            --surface: #0a0a0b;
+            --surface-hover: #121214;
+            --border: rgba(255, 255, 255, 0.08);
+            --text-primary: #ededed;
+            --text-secondary: #a1a1aa;
+            --accent: #38bdf8; /* Light Blue for Medical/Tech */
+            --accent-glow: rgba(56, 189, 248, 0.15);
+            --highlight: #818cf8; /* Indigo for Deep Learning */
+            
+            --font-main: 'Inter', sans-serif;
+            --font-code: 'JetBrains Mono', monospace;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            background-color: var(--bg);
+            color: var(--text-primary);
+            font-family: var(--font-main);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: var(--bg); }
+        ::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #555; }
+
+        a { text-decoration: none; color: inherit; transition: 0.2s; }
+
+        /* Layout */
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        /* Background Grid */
+        .bg-grid {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-image: 
+                linear-gradient(var(--border) 1px, transparent 1px),
+                linear-gradient(90deg, var(--border) 1px, transparent 1px);
+            background-size: 50px 50px;
+            mask-image: radial-gradient(circle at 50% 50%, black 40%, transparent 80%);
+            z-index: -1;
+            opacity: 0.3;
+            pointer-events: none;
+        }
+
+        /* Header */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 2rem 0;
+            font-family: var(--font-code);
+            font-size: 0.85rem;
+        }
+
+        .logo { font-weight: 700; letter-spacing: -0.5px; }
+        .logo span { color: var(--accent); }
+
+        .nav-links { display: flex; gap: 2rem; }
+        .nav-links a { color: var(--text-secondary); }
+        .nav-links a:hover { color: var(--accent); }
+
+        /* Hero */
+        .hero {
+            padding: 6rem 0 4rem 0;
+        }
+
+        .status-pill {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border: 1px solid var(--highlight);
+            color: var(--highlight);
+            border-radius: 50px;
+            font-family: var(--font-code);
+            font-size: 0.75rem;
+            margin-bottom: 1.5rem;
+            background: rgba(129, 140, 248, 0.1);
+        }
+
+        h1 {
+            font-size: clamp(2.5rem, 5vw, 4.5rem);
+            font-weight: 700;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(to bottom right, #fff, #94a3b8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-subtitle {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            max-width: 650px;
+            margin-bottom: 2rem;
+        }
+
+        .affiliations {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .tag {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            font-family: var(--font-code);
+            font-size: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .tag i { width: 14px; height: 14px; color: var(--accent); }
+
+        /* Sections */
+        section { padding: 5rem 0; }
+        
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: end;
+            margin-bottom: 3rem;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 1rem;
+        }
+
+        .section-title {
+            font-family: var(--font-code);
+            color: var(--accent);
+            font-size: 1.1rem;
+        }
+
+        /* Experience Grid */
+        .exp-grid {
+            display: grid;
+            gap: 1.5rem;
+        }
+
+        .card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            padding: 2rem;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card:hover {
+            border-color: var(--accent);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px -10px rgba(0,0,0,0.5);
+        }
+
+        /* Glowing orb effect on hover */
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(800px circle at var(--mouse-x) var(--mouse-y), rgba(255,255,255,0.03), transparent 40%);
+            opacity: 0;
+            transition: opacity 0.5s;
+            pointer-events: none;
+        }
+        .card:hover::before { opacity: 1; }
+
+        .card-top {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .role-title { font-size: 1.1rem; font-weight: 600; color: #fff; }
+        .company { color: var(--accent); font-family: var(--font-code); font-size: 0.9rem; }
+        .date { font-family: var(--font-code); font-size: 0.8rem; color: var(--text-secondary); }
+        
+        .card-desc {
+            font-size: 0.95rem;
+            color: #d4d4d8;
+            margin-bottom: 1rem;
+        }
+
+        .card-desc ul {
+            padding-left: 1.2rem;
+            margin-top: 0.5rem;
+        }
+        
+        .card-desc li { margin-bottom: 0.4rem; color: var(--text-secondary); font-size: 0.9rem; }
+
+        /* Projects */
+        .project-card h3 { font-size: 1.3rem; margin-bottom: 0.5rem; }
+        .tech-stack {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+        .tech-pill {
+            font-size: 0.75rem;
+            font-family: var(--font-code);
+            background: rgba(255,255,255,0.05);
+            padding: 0.2rem 0.6rem;
+            border-radius: 4px;
+            color: #9ca3af;
+        }
+
+        /* Achievements List */
+        .achievement-item {
+            display: flex;
+            gap: 1rem;
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--border);
+            align-items: center;
+        }
+        .achievement-item:last-child { border: none; }
+        .trophy-icon { color: gold; }
+
+        /* Contact */
+        .contact-btn {
+            display: inline-block;
+            background: var(--text-primary);
+            color: var(--bg);
+            padding: 1rem 2rem;
+            border-radius: 6px;
+            font-weight: 600;
+            margin-top: 2rem;
+        }
+        .contact-btn:hover { background: var(--accent); }
+
+        /* Footer */
+        footer {
+            padding: 4rem 0;
+            text-align: center;
+            font-family: var(--font-code);
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            border-top: 1px solid var(--border);
+        }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 2.5rem; }
+            .section-header { flex-direction: column; align-items: start; gap: 0.5rem; }
+        }
+    </style>
 </head>
 <body>
-  <div class="container">
-    <h1>🌟 Welcome to My Site</h1>
-    <p>This is a demonstration of GitHub Pages with custom 404 error handling.</p>
-    <p>📧 Contact: <strong>24f2004489@ds.study.iitm.ac.in</strong></p>
-    <a href="/nonexistent-page">🔍 Test 404 Page</a>
-  </div>
+
+    <div class="bg-grid"></div>
+
+    <div class="container">
+        <!-- Navigation -->
+        <nav>
+            <div class="logo">AJMAL<span>.M</span></div>
+            <div class="nav-links">
+                <a href="#experience">Experience</a>
+                <a href="#projects">Projects</a>
+                <a href="#contact">Contact</a>
+            </div>
+        </nav>
+
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="status-pill">AI RESEARCHER</div>
+            <h1>Bridging Clinical Reality &<br>Deep Learning Architectures.</h1>
+            <p class="hero-subtitle">
+                BS Student at <b>IIT Madras</b>. Conducting research at the intersection of Causal Inference, Multimodal AI, and Medical Imaging.
+            </p>
+            
+            <div class="affiliations">
+                <div class="tag"><i data-feather="map-pin"></i> MIT</div>
+                <div class="tag"><i data-feather="cpu"></i> CMU</div>
+                <div class="tag"><i data-feather="layers"></i> Stanford</div>
+                <div class="tag"><i data-feather="code"></i> MBZUAI</div>
+            </div>
+        </section>
+
+        <!-- Experience Section -->
+        <section id="experience">
+            <div class="section-header">
+                <span class="section-title">01 / Research Experience</span>
+                <span style="font-family: var(--font-code); color: var(--text-secondary); font-size: 0.8rem;">2024 — Present</span>
+            </div>
+
+            <div class="exp-grid">
+                
+                <!-- MIT -->
+                <div class="card">
+                    <div class="card-top">
+                        <div>
+                            <div class="role-title">AI Researcher</div>
+                            <div class="company">Massachusetts Institute of Technology (MIT)</div>
+                        </div>
+                        <div class="date">Oct 2025 - Present</div>
+                    </div>
+                    <div class="card-desc">
+                        Lab: Prof. Leo Anthony Celi
+                        <ul>
+                            <li>Conducting causal inference analysis of vasopressor treatment in septic shock using MIMIC-IV and eICU-CRD databases.</li>
+                            <li>Applying trial emulation methodology (MSM, TMLE) to evaluate optimal timing for critical care interventions.</li>
+                        </ul>
+                    </div>
+                    <div class="tech-stack">
+                        <span class="tech-pill">Causal Inference</span>
+                        <span class="tech-pill">MIMIC-IV</span>
+                        <span class="tech-pill">Medical AI</span>
+                    </div>
+                </div>
+
+                <!-- CMU -->
+                <div class="card">
+                    <div class="card-top">
+                        <div>
+                            <div class="role-title">AI Researcher</div>
+                            <div class="company">Carnegie Mellon University (CMU)</div>
+                        </div>
+                        <div class="date">Jun 2025 - Present</div>
+                    </div>
+                    <div class="card-desc">
+                        Labs: Prof. Min Xu & Dr. Xiaoyu Cao
+                        <ul>
+                            <li>Implemented BrainMVP baseline on BraTS2023 Pediatric dataset (Dice: 0.8504).</li>
+                            <li>Conducted 3D multimodal MRI representation learning and LangSplatV2 evaluation (IoU 72.2%).</li>
+                            <li>Authored NeurIPS 2025 survey on multimodal/self-supervised pretraining in medical imaging.</li>
+                        </ul>
+                    </div>
+                    <div class="tech-stack">
+                        <span class="tech-pill">3D Vision</span>
+                        <span class="tech-pill">Representation Learning</span>
+                        <span class="tech-pill">HPC</span>
+                    </div>
+                </div>
+
+                <!-- Stanford -->
+                <div class="card">
+                    <div class="card-top">
+                        <div>
+                            <div class="role-title">AI Research Intern</div>
+                            <div class="company">Stanford University</div>
+                        </div>
+                        <div class="date">Mar 2025 - Jun 2025</div>
+                    </div>
+                    <div class="card-desc">
+                        Lab: Dr. Wei Peng
+                        <ul>
+                            <li>Developed preprocessing pipeline for ~4000 ADNI 3D MRI scans on Google Cloud Platform.</li>
+                            <li>Optimized 3D Convolutional Autoencoder, U-Net, and IBQ-VAE architectures for brain MRI compression.</li>
+                            <li>Managed experiments on A100 GPUs including codebook configuration.</li>
+                        </ul>
+                    </div>
+                    <div class="tech-stack">
+                        <span class="tech-pill">PyTorch</span>
+                        <span class="tech-pill">GCP</span>
+                        <span class="tech-pill">3D CNNs</span>
+                    </div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+                    <!-- MBZUAI -->
+                    <div class="card">
+                        <div class="card-top">
+                            <div>
+                                <div class="role-title">Project Lead</div>
+                                <div class="company">MBZUAI</div>
+                            </div>
+                            <div class="date">Jun 2025 - Dec 2025</div>
+                        </div>
+                        <div class="card-desc">
+                            Leading LLM clinical reasoning project with Calicut Medical College. Working on Hindi-English finance NLP for TACL publication.
+                        </div>
+                    </div>
+
+                    <!-- NIT Calicut -->
+                    <div class="card">
+                        <div class="card-top">
+                            <div>
+                                <div class="role-title">NLP Researcher</div>
+                                <div class="company">NIT Calicut</div>
+                            </div>
+                            <div class="date">Mar 2025 - Oct 2025</div>
+                        </div>
+                        <div class="card-desc">
+                            Built automated pipeline using Mistral-7B-Instruct to fact-check news transcripts. Designed real-time dashboards for verification.
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Projects Section -->
+        <section id="projects">
+            <div class="section-header">
+                <span class="section-title">02 / Technical Projects</span>
+            </div>
+
+            <div class="card project-card">
+                <div class="card-top">
+                    <h3>Autonomous Software Engineering Agent</h3>
+                    <div class="date"><a href="#" style="color: var(--accent);">View Code <i data-feather="arrow-up-right" style="width:12px;"></i></a></div>
+                </div>
+                <div class="card-desc">
+                    <p>Architected a production-grade LLM agent handling end-to-end software delivery from natural language requirements to deployed applications. Achieved 95%+ success rate under real evaluation conditions.</p>
+                    <ul style="margin-top:1rem;">
+                        <li>Innovated prompt engineering framework enabling GPT-4o Mini to generate multi-paradigm code (Python/Flask, Docker, YAML).</li>
+                        <li>Engineered robust infrastructure with < 2-minute deployment cycles validated by IIT Madras faculty.</li>
+                    </ul>
+                </div>
+                <div class="tech-stack">
+                    <span class="tech-pill">GPT-4o Mini</span>
+                    <span class="tech-pill">Flask</span>
+                    <span class="tech-pill">Docker</span>
+                    <span class="tech-pill">GitHub REST API</span>
+                    <span class="tech-pill">MLOps</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Achievements & Edtree -->
+        <section>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 3rem;">
+                
+                <!-- Edtree AI -->
+                <div>
+                    <div class="section-header" style="margin-bottom: 1.5rem;">
+                        <span class="section-title">03 / Leadership</span>
+                    </div>
+                    <div class="card">
+                        <div class="role-title">Co-Founder @ Edtree AI</div>
+                        <p style="color: var(--text-secondary); margin: 1rem 0;">
+                            Empowering rural high school students in Kerala. Bridging the digital divide by providing hands-on AI learning opportunities.
+                        </p>
+                        <div class="tech-stack">
+                            <span class="tech-pill">100+ Students Mentored</span>
+                            <span class="tech-pill">Social Impact</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Awards -->
+                <div>
+                    <div class="section-header" style="margin-bottom: 1.5rem;">
+                        <span class="section-title">04 / Honors</span>
+                    </div>
+                    <div class="achievement-item">
+                        <i data-feather="award" class="trophy-icon"></i>
+                        <div>
+                            <div style="color: #fff; font-weight: 500;">MARS 4.0 Finalist</div>
+                            <div class="date">Cambridge University AI Safety Hub</div>
+                        </div>
+                    </div>
+                    <div class="achievement-item">
+                        <i data-feather="star" class="trophy-icon"></i>
+                        <div>
+                            <div style="color: #fff; font-weight: 500;">NMMSE Scholar</div>
+                            <div class="date">National Scholarship for Academic Excellence</div>
+                        </div>
+                    </div>
+                    <div class="achievement-item">
+                        <i data-feather="check-circle" class="trophy-icon"></i>
+                        <div>
+                            <div style="color: #fff; font-weight: 500;">1st Rank</div>
+                            <div class="date">Masjid Public Exam (2k participants)</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact -->
+        <section id="contact" style="text-align: center; padding: 8rem 0;">
+            <h2 style="font-size: 2.5rem; margin-bottom: 1rem;">Let's Collaborate</h2>
+            <p style="color: var(--text-secondary);">Open to research collaborations in Medical AI and Computer Vision.</p>
+            
+            <div style="margin-top: 2rem; display: flex; justify-content: center; gap: 2rem; font-family: var(--font-code);">
+                <a href="mailto:24f2004489@ds.study.iitm.ac.in" style="color: var(--accent);">Email</a>
+                <a href="#" style="color: var(--text-secondary);">LinkedIn</a>
+                <a href="#" style="color: var(--text-secondary);">GitHub</a>
+                <a href="#" style="color: var(--text-secondary);">+91-7902405256</a>
+            </div>
+        </section>
+
+        <footer>
+            <p>Designed & Built by Ajmal M. © 2025</p>
+        </footer>
+    </div>
+
+    <script>
+        feather.replace();
+        
+        // Mouse movement effect for cards
+        document.querySelectorAll('.card').forEach(card => {
+            card.addEventListener('mousemove', e => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                card.style.setProperty('--mouse-x', `${x}px`);
+                card.style.setProperty('--mouse-y', `${y}px`);
+            });
+        });
+    </script>
 </body>
 </html>
