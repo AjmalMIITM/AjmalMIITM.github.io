@@ -21,9 +21,9 @@
             --border: rgba(255, 255, 255, 0.08);
             --text-primary: #ededed;
             --text-secondary: #a1a1aa;
-            --accent: #38bdf8; /* Light Blue for Medical/Tech */
+            --accent: #38bdf8;
             --accent-glow: rgba(56, 189, 248, 0.15);
-            --highlight: #818cf8; /* Indigo for Deep Learning */
+            --highlight: #818cf8;
             
             --font-main: 'Inter', sans-serif;
             --font-code: 'JetBrains Mono', monospace;
@@ -45,27 +45,37 @@
         ::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; }
         ::-webkit-scrollbar-thumb:hover { background: #555; }
 
-        a { text-decoration: none; color: inherit; transition: 0.2s; }
+        html { scroll-behavior: smooth; }
+        a { text-decoration: none; color: inherit; transition: 0.3s; }
 
         /* Layout */
         .container {
             max-width: 1000px;
             margin: 0 auto;
             padding: 0 2rem;
+            position: relative;
+            z-index: 1;
         }
 
-        /* Background Grid */
+        /* Animated Background Grid */
         .bg-grid {
             position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
+            top: 0; left: 0; width: 200%; height: 200%;
             background-image: 
                 linear-gradient(var(--border) 1px, transparent 1px),
                 linear-gradient(90deg, var(--border) 1px, transparent 1px);
             background-size: 50px 50px;
-            mask-image: radial-gradient(circle at 50% 50%, black 40%, transparent 80%);
-            z-index: -1;
-            opacity: 0.3;
+            mask-image: radial-gradient(circle at 50% 50%, black 30%, transparent 70%);
+            z-index: 0;
+            opacity: 0.25;
             pointer-events: none;
+            animation: gridMove 60s linear infinite;
+            transform: perspective(500px) rotateX(20deg);
+        }
+
+        @keyframes gridMove {
+            0% { transform: perspective(500px) rotateX(20deg) translateY(0); }
+            100% { transform: perspective(500px) rotateX(20deg) translateY(-50px); }
         }
 
         /* Header */
@@ -76,19 +86,24 @@
             padding: 2rem 0;
             font-family: var(--font-code);
             font-size: 0.85rem;
+            animation: fadeInDown 1s ease-out;
         }
 
         .logo { font-weight: 700; letter-spacing: -0.5px; }
         .logo span { color: var(--accent); }
 
         .nav-links { display: flex; gap: 2rem; }
-        .nav-links a { color: var(--text-secondary); }
+        .nav-links a { color: var(--text-secondary); position: relative; }
         .nav-links a:hover { color: var(--accent); }
+        .nav-links a::after {
+            content: ''; position: absolute; width: 0; height: 1px;
+            bottom: -4px; left: 0; background-color: var(--accent);
+            transition: width 0.3s;
+        }
+        .nav-links a:hover::after { width: 100%; }
 
         /* Hero */
-        .hero {
-            padding: 6rem 0 4rem 0;
-        }
+        .hero { padding: 6rem 0 4rem 0; }
 
         .status-pill {
             display: inline-block;
@@ -99,7 +114,14 @@
             font-family: var(--font-code);
             font-size: 0.75rem;
             margin-bottom: 1.5rem;
-            background: rgba(129, 140, 248, 0.1);
+            background: rgba(129, 140, 248, 0.05);
+            animation: pulse 3s infinite;
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(129, 140, 248, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(129, 140, 248, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(129, 140, 248, 0); }
         }
 
         h1 {
@@ -107,9 +129,16 @@
             font-weight: 700;
             line-height: 1.1;
             margin-bottom: 1.5rem;
-            background: linear-gradient(to bottom right, #fff, #94a3b8);
+            background: linear-gradient(90deg, #fff, #94a3b8, #fff);
+            background-size: 200% auto;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            animation: gradientText 5s linear infinite;
+        }
+
+        @keyframes gradientText {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 200% 50%; }
         }
 
         .hero-subtitle {
@@ -117,6 +146,8 @@
             color: var(--text-secondary);
             max-width: 650px;
             margin-bottom: 2rem;
+            opacity: 0;
+            animation: fadeInUp 0.8s ease-out 0.3s forwards;
         }
 
         .affiliations {
@@ -124,6 +155,8 @@
             flex-wrap: wrap;
             gap: 1rem;
             margin-top: 1rem;
+            opacity: 0;
+            animation: fadeInUp 0.8s ease-out 0.6s forwards;
         }
 
         .tag {
@@ -136,11 +169,41 @@
             display: flex;
             align-items: center;
             gap: 0.5rem;
+            transition: transform 0.3s, border-color 0.3s;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        /* Stagger floating delay */
+        .tag:nth-child(1) { animation-delay: 0s; }
+        .tag:nth-child(2) { animation-delay: 1s; }
+        .tag:nth-child(3) { animation-delay: 2s; }
+        .tag:nth-child(4) { animation-delay: 3s; }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-5px); }
+            100% { transform: translateY(0px); }
+        }
+        
+        .tag:hover {
+            border-color: var(--accent);
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(56, 189, 248, 0.1);
         }
         
         .tag i { width: 14px; height: 14px; color: var(--accent); }
 
-        /* Sections */
+        /* Sections - Scroll Reveal Animation classes */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease-out;
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
         section { padding: 5rem 0; }
         
         .section-header {
@@ -158,26 +221,24 @@
             font-size: 1.1rem;
         }
 
-        /* Experience Grid */
-        .exp-grid {
-            display: grid;
-            gap: 1.5rem;
-        }
+        /* Cards */
+        .exp-grid { display: grid; gap: 1.5rem; }
 
         .card {
             background: var(--surface);
             border: 1px solid var(--border);
             padding: 2rem;
             border-radius: 12px;
-            transition: all 0.3s ease;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             position: relative;
             overflow: hidden;
+            z-index: 2;
         }
 
         .card:hover {
             border-color: var(--accent);
-            transform: translateY(-2px);
-            box-shadow: 0 10px 30px -10px rgba(0,0,0,0.5);
+            transform: translateY(-5px) scale(1.01);
+            box-shadow: 0 20px 40px -15px rgba(0,0,0,0.7);
         }
 
         /* Glowing orb effect on hover */
@@ -185,10 +246,11 @@
             content: '';
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: radial-gradient(800px circle at var(--mouse-x) var(--mouse-y), rgba(255,255,255,0.03), transparent 40%);
+            background: radial-gradient(600px circle at var(--mouse-x) var(--mouse-y), rgba(56, 189, 248, 0.06), transparent 40%);
             opacity: 0;
             transition: opacity 0.5s;
             pointer-events: none;
+            z-index: -1;
         }
         .card:hover::before { opacity: 1; }
 
@@ -209,22 +271,12 @@
             color: #d4d4d8;
             margin-bottom: 1rem;
         }
-
-        .card-desc ul {
-            padding-left: 1.2rem;
-            margin-top: 0.5rem;
-        }
         
+        .card-desc ul { padding-left: 1.2rem; margin-top: 0.5rem; }
         .card-desc li { margin-bottom: 0.4rem; color: var(--text-secondary); font-size: 0.9rem; }
 
-        /* Projects */
-        .project-card h3 { font-size: 1.3rem; margin-bottom: 0.5rem; }
-        .tech-stack {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.5rem;
-            margin-top: 1rem;
-        }
+        /* Tech Pills */
+        .tech-stack { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1rem; }
         .tech-pill {
             font-size: 0.75rem;
             font-family: var(--font-code);
@@ -232,18 +284,26 @@
             padding: 0.2rem 0.6rem;
             border-radius: 4px;
             color: #9ca3af;
+            transition: 0.2s;
+            cursor: default;
         }
+        .tech-pill:hover { background: rgba(56, 189, 248, 0.15); color: var(--accent); }
 
-        /* Achievements List */
+        /* Project Card Specifics */
+        .project-card h3 { font-size: 1.3rem; margin-bottom: 0.5rem; }
+        
+        /* Achievements */
         .achievement-item {
             display: flex;
             gap: 1rem;
             padding: 1rem 0;
             border-bottom: 1px solid var(--border);
             align-items: center;
+            transition: 0.3s;
         }
+        .achievement-item:hover { transform: translateX(10px); }
         .achievement-item:last-child { border: none; }
-        .trophy-icon { color: gold; }
+        .trophy-icon { color: #ffd700; filter: drop-shadow(0 0 5px rgba(255, 215, 0, 0.3)); }
 
         /* Contact */
         .contact-btn {
@@ -255,7 +315,7 @@
             font-weight: 600;
             margin-top: 2rem;
         }
-        .contact-btn:hover { background: var(--accent); }
+        .contact-btn:hover { background: var(--accent); transform: scale(1.05); }
 
         /* Footer */
         footer {
@@ -265,11 +325,23 @@
             font-size: 0.8rem;
             color: var(--text-secondary);
             border-top: 1px solid var(--border);
+            margin-top: 4rem;
+        }
+
+        /* Keyframes for Entry */
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         @media (max-width: 768px) {
             h1 { font-size: 2.5rem; }
             .section-header { flex-direction: column; align-items: start; gap: 0.5rem; }
+            .bg-grid { width: 100%; animation: none; }
         }
     </style>
 </head>
@@ -305,7 +377,7 @@
         </section>
 
         <!-- Experience Section -->
-        <section id="experience">
+        <section id="experience" class="reveal">
             <div class="section-header">
                 <span class="section-title">01 / Research Experience</span>
                 <span style="font-family: var(--font-code); color: var(--text-secondary); font-size: 0.8rem;">2024 — Present</span>
@@ -314,7 +386,7 @@
             <div class="exp-grid">
                 
                 <!-- MIT -->
-                <div class="card">
+                <div class="card reveal">
                     <div class="card-top">
                         <div>
                             <div class="role-title">AI Researcher</div>
@@ -323,7 +395,7 @@
                         <div class="date">Oct 2025 - Present</div>
                     </div>
                     <div class="card-desc">
-                        Lab: Prof. Leo Anthony Celi
+                        Focus: Laboratory for Computational Physiology
                         <ul>
                             <li>Conducting causal inference analysis of vasopressor treatment in septic shock using MIMIC-IV and eICU-CRD databases.</li>
                             <li>Applying trial emulation methodology (MSM, TMLE) to evaluate optimal timing for critical care interventions.</li>
@@ -337,7 +409,7 @@
                 </div>
 
                 <!-- CMU -->
-                <div class="card">
+                <div class="card reveal">
                     <div class="card-top">
                         <div>
                             <div class="role-title">AI Researcher</div>
@@ -346,7 +418,7 @@
                         <div class="date">Jun 2025 - Present</div>
                     </div>
                     <div class="card-desc">
-                        Labs: Prof. Min Xu & Dr. Xiaoyu Cao
+                        Focus: Computational Biology & 3D Vision
                         <ul>
                             <li>Implemented BrainMVP baseline on BraTS2023 Pediatric dataset (Dice: 0.8504).</li>
                             <li>Conducted 3D multimodal MRI representation learning and LangSplatV2 evaluation (IoU 72.2%).</li>
@@ -361,7 +433,7 @@
                 </div>
 
                 <!-- Stanford -->
-                <div class="card">
+                <div class="card reveal">
                     <div class="card-top">
                         <div>
                             <div class="role-title">AI Research Intern</div>
@@ -370,7 +442,7 @@
                         <div class="date">Mar 2025 - Jun 2025</div>
                     </div>
                     <div class="card-desc">
-                        Lab: Dr. Wei Peng
+                        Focus: Psychiatry & Behavioral Sciences (AI Lab)
                         <ul>
                             <li>Developed preprocessing pipeline for ~4000 ADNI 3D MRI scans on Google Cloud Platform.</li>
                             <li>Optimized 3D Convolutional Autoencoder, U-Net, and IBQ-VAE architectures for brain MRI compression.</li>
@@ -384,9 +456,9 @@
                     </div>
                 </div>
 
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem;">
                     <!-- MBZUAI -->
-                    <div class="card">
+                    <div class="card reveal">
                         <div class="card-top">
                             <div>
                                 <div class="role-title">Project Lead</div>
@@ -400,7 +472,7 @@
                     </div>
 
                     <!-- NIT Calicut -->
-                    <div class="card">
+                    <div class="card reveal">
                         <div class="card-top">
                             <div>
                                 <div class="role-title">NLP Researcher</div>
@@ -418,15 +490,15 @@
         </section>
 
         <!-- Projects Section -->
-        <section id="projects">
+        <section id="projects" class="reveal">
             <div class="section-header">
                 <span class="section-title">02 / Technical Projects</span>
             </div>
 
-            <div class="card project-card">
+            <div class="card project-card reveal">
                 <div class="card-top">
                     <h3>Autonomous Software Engineering Agent</h3>
-                    <div class="date"><a href="#" style="color: var(--accent);">View Code <i data-feather="arrow-up-right" style="width:12px;"></i></a></div>
+                    <div class="date"><a href="#" style="color: var(--accent); display: flex; align-items: center; gap: 5px;">View Code <i data-feather="arrow-up-right" style="width:14px;"></i></a></div>
                 </div>
                 <div class="card-desc">
                     <p>Architected a production-grade LLM agent handling end-to-end software delivery from natural language requirements to deployed applications. Achieved 95%+ success rate under real evaluation conditions.</p>
@@ -446,11 +518,11 @@
         </section>
 
         <!-- Achievements & Edtree -->
-        <section>
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 3rem;">
+        <section class="reveal">
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 3rem;">
                 
                 <!-- Edtree AI -->
-                <div>
+                <div class="reveal" style="transition-delay: 0.1s;">
                     <div class="section-header" style="margin-bottom: 1.5rem;">
                         <span class="section-title">03 / Leadership</span>
                     </div>
@@ -467,7 +539,7 @@
                 </div>
 
                 <!-- Awards -->
-                <div>
+                <div class="reveal" style="transition-delay: 0.2s;">
                     <div class="section-header" style="margin-bottom: 1.5rem;">
                         <span class="section-title">04 / Honors</span>
                     </div>
@@ -497,15 +569,14 @@
         </section>
 
         <!-- Contact -->
-        <section id="contact" style="text-align: center; padding: 8rem 0;">
+        <section id="contact" class="reveal" style="text-align: center; padding: 8rem 0;">
             <h2 style="font-size: 2.5rem; margin-bottom: 1rem;">Let's Collaborate</h2>
             <p style="color: var(--text-secondary);">Open to research collaborations in Medical AI and Computer Vision.</p>
             
             <div style="margin-top: 2rem; display: flex; justify-content: center; gap: 2rem; font-family: var(--font-code);">
-                <a href="mailto:24f2004489@ds.study.iitm.ac.in" style="color: var(--accent);">Email</a>
-                <a href="#" style="color: var(--text-secondary);">LinkedIn</a>
+                <a href="mailto:24f2004489@ds.study.iitm.ac.in" style="color: var(--accent); transition: 0.2s; border-bottom: 1px solid transparent;">Email: 24f2004489...</a>
+                <a href="#" style="color: var(--text-secondary); hover: color: var(--text-primary);">LinkedIn</a>
                 <a href="#" style="color: var(--text-secondary);">GitHub</a>
-                <a href="#" style="color: var(--text-secondary);">+91-7902405256</a>
             </div>
         </section>
 
@@ -515,9 +586,10 @@
     </div>
 
     <script>
+        // Initialize Icons
         feather.replace();
         
-        // Mouse movement effect for cards
+        // Dynamic Mouse Follow Effect for Cards
         document.querySelectorAll('.card').forEach(card => {
             card.addEventListener('mousemove', e => {
                 const rect = card.getBoundingClientRect();
@@ -526,6 +598,25 @@
                 card.style.setProperty('--mouse-x', `${x}px`);
                 card.style.setProperty('--mouse-y', `${y}px`);
             });
+        });
+
+        // Scroll Reveal Animation
+        const observerOptions = {
+            threshold: 0.15,
+            rootMargin: "0px 0px -50px 0px"
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                    // observer.unobserve(entry.target); // Uncomment if you want it to animate only once
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.reveal').forEach(el => {
+            observer.observe(el);
         });
     </script>
 </body>
